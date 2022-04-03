@@ -8,7 +8,7 @@ namespace Loretta.Retargeting.Core.Converters
     [Converter(LuaVersion.Lua54, LuaVersion.Lua53)]
     internal sealed class Lua54ToLua53Converter : ConverterBase
     {
-        public override SyntaxNode Convert(SyntaxNode node, out ImmutableArray<Diagnostic> diagnostics)
+        public override SyntaxNode Convert(LuaSyntaxNode node, out ImmutableArray<Diagnostic> diagnostics)
         {
             diagnostics = ImmutableArray<Diagnostic>.Empty;
             return Rewriter.Instance.Visit(node);

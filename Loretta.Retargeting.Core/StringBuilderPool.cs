@@ -66,10 +66,12 @@ namespace Loretta.Retargeting.Core
             {
                 builder.Clear();
                 if (s_first == null)
+                {
                     // Intentionally not using interlocked here. 
                     // In a worst case scenario two objects may be stored into same slot.
                     // It is very unlikely to happen and will only mean that one of the objects will get collected.
                     s_first = builder;
+                }
                 else
                 {
                     FreeSlow(builder);
