@@ -1,34 +1,43 @@
-﻿using Loretta.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
 using Loretta.CodeAnalysis.Lua.Syntax;
-using Loretta.RetargettingCompiler.Core.Converters;
 
 namespace Loretta.Retargeting.Core.Converters
 {
     [Converter(LuaVersion.Lua54, LuaVersion.Lua53)]
-    internal sealed class Lua54ToLua53Converter : LuaSyntaxRewriter
+    internal sealed class Lua54ToLua53Converter : ConverterBase
     {
-        public override SyntaxNode? VisitLocalDeclarationName(LocalDeclarationNameSyntax node)
+        public override SyntaxNode Convert(SyntaxNode node, out ImmutableArray<Diagnostic> diagnostics)
         {
-            if (node.Attribute is not null)
+            diagnostics = ImmutableArray<Diagnostic>.Empty;
+            return Rewriter.Instance.Visit(node);
+        }
+
+        private class Rewriter : LuaSyntaxRewriter
+        {
+            public static readonly Rewriter Instance = new();
+
+            public override SyntaxNode? VisitLocalDeclarationName(LocalDeclarationNameSyntax node)
             {
-                var attributeName = node.AttributeName;
-                node = node.WithAttribute(null);
+                if (node.Attribute is not null)
+                {
+                    var attributeName = node.AttributeName;
+                    node = node.WithAttribute(null);
 
-                var builder = StringBuilderPool.GetBuilder();
-                builder.Append(" <")
-                       .Append(attributeName)
-                       .Append("> ");
-                Helpers.TurnIntoMultiLineComment(builder);
-                var comment = SyntaxFactory.Comment(StringBuilderPool.ToStringAndFree(builder));
+                    var builder = StringBuilderPool.GetBuilder();
+                    builder.Append($" <{attributeName}> ");
+                    Helpers.TurnIntoMultiLineComment(builder);
+                    var comment = SyntaxFactory.Comment(StringBuilderPool.ToStringAndFree(builder));
 
-                node = node.WithTrailingTrivia(
-                    node.GetTrailingTrivia().Add(SyntaxFactory.Space).Add(comment));
+                    node = node.WithTrailingTrivia(
+                        node.GetTrailingTrivia().Add(SyntaxFactory.Space).Add(comment));
 
-                return node;
+                    return node;
+                }
+
+                return base.VisitLocalDeclarationName(node);
             }
-
-            return base.VisitLocalDeclarationName(node);
         }
     }
 }
