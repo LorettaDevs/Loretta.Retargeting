@@ -2,8 +2,6 @@
 using System.Text;
 using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
-using Loretta.RetargettingCompiler.Core;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Loretta.Retargeting.Core
 {
@@ -93,12 +91,12 @@ namespace Loretta.Retargeting.Core
                     var builder = new StackStringBuilder(stackalloc char[maxStack]);
 
                     builder.Append("--[")
-                        .Append('=', equalsCount)
-                        .Append('[')
-                        .Append(text)
-                        .Append(']')
-                        .Append('=', equalsCount)
-                        .Append(']');
+                           .Append('=', equalsCount)
+                           .Append('[')
+                           .Append(text)
+                           .Append(']')
+                           .Append('=', equalsCount)
+                           .Append(']');
 
                     commentText = builder.ToString();
                 }
@@ -107,12 +105,12 @@ namespace Loretta.Retargeting.Core
                     var builder = StringBuilderPool.GetBuilder();
 
                     builder.Append("--[")
-                        .Insert(builder.Length - 1, "=", equalsCount)
-                        .Append('[')
-                        .Append(text)
-                        .Append(']')
-                        .Insert(builder.Length - 1, "=", equalsCount)
-                        .Append(']');
+                           .Append('=', equalsCount)
+                           .Append('[')
+                           .Append(text)
+                           .Append(']')
+                           .Append('=', equalsCount)
+                           .Append(']');
 
                     commentText = StringBuilderPool.ToStringAndFree(builder);
                 }
