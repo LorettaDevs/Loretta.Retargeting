@@ -3,13 +3,13 @@
   <Nodes>
     <Node Id="944ddc76-c5a8-47cf-b218-c316c04a2e5a1" Category="Comment" Bounds="449.593333333334,179.98,242.246666666667,89.8" Label="Mostly Lua 5.1 with the following from 5.2 and 5.3:&#xD;&#xA;- hex escapes&#xD;&#xA;- whitespace escapes&#xD;&#xA;- unicode escapes" />
     <Node Id="FiveM" Bounds="544.933333333334,123.9,51.5666666666666,25.96" />
-    <Node Id="GMod" Bounds="730.855000000001,67.8999999999999,53.1066666666666,25.96" Label="GMod" />
-    <Node Id="Lua5.1" Bounds="-3.5527136788005E-15,167.9,57.3733333333334,25.96" Label="Lua 5.1" />
+    <Node Id="GMod" Bounds="730.855000000001,67.9,53.1066666666666,25.96" Label="GMod" />
+    <Node Id="Lua5.1" Bounds="0,167.9,57.3733333333334,25.96" Label="Lua 5.1" />
     <Node Id="Lua5.2" Bounds="87.3733333333334,167.9,57.3733333333334,25.96" Label="Lua 5.2" />
     <Node Id="Lua5.3" Bounds="268.483333333334,135.9,57.3733333333334,25.96" Label="Lua 5.3" />
     <Node Id="Lua5.4" Bounds="542.030000000001,67.9,57.3733333333334,25.96" Label="Lua 5.4" />
     <Node Id="LuaJIT2.0" Bounds="535.148333333334,11.9,71.1366666666668,25.96" Label="LuaJIT 2.0" />
-    <Node Id="LuaJIT2.1" Bounds="721.840000000001,11.8999999999999,71.1366666666668,25.96" Label="LuaJIT 2.1" />
+    <Node Id="LuaJIT2.1" Bounds="721.840000000001,11.9,71.1366666666668,25.96" Label="LuaJIT 2.1" />
     <Node Id="Luau" Bounds="732.408333333334,211.9,50,25.96" />
     <Node Id="PartialInheritance" Category="Comment" Bounds="174.746666666667,0,244.846666666667,105.76" Label="Mostly Lua 5.1 with the following from 5.2:&#xD;&#xA;- goto&#xD;&#xA;- hex escapes&#xD;&#xA;- hex float literals&#xD;&#xA;- whitespace escapes&#xD;&#xA;- no invalid escapes" />
   </Nodes>
