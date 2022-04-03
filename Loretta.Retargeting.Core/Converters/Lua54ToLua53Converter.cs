@@ -1,8 +1,9 @@
 ﻿using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
 using Loretta.CodeAnalysis.Lua.Syntax;
+using Loretta.RetargettingCompiler.Core.Converters;
 
-namespace Loretta.RetargettingCompiler.Core.Converters
+namespace Loretta.Retargeting.Core.Converters
 {
     [Converter(LuaVersion.Lua54, LuaVersion.Lua53)]
     internal sealed class Lua54ToLua53Converter : LuaSyntaxRewriter

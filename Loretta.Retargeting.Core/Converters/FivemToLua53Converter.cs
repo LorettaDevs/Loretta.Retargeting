@@ -2,8 +2,10 @@
 using Loretta.CodeAnalysis.Lua;
 using Loretta.CodeAnalysis.Lua.SymbolDisplay;
 using Loretta.CodeAnalysis.Lua.Syntax;
+using Loretta.Retargeting.Core;
+using Loretta.RetargettingCompiler.Core.Converters;
 
-namespace Loretta.RetargettingCompiler.Core.Converters
+namespace Loretta.Retargeting.Core.Converters
 {
     [Converter(LuaVersion.FiveM, LuaVersion.Lua53)]
     internal sealed class FivemToLua53Converter : LuaSyntaxRewriter

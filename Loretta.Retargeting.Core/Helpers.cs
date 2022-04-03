@@ -2,9 +2,10 @@
 using System.Text;
 using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
+using Loretta.RetargettingCompiler.Core;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Loretta.RetargettingCompiler.Core
+namespace Loretta.Retargeting.Core
 {
     internal static class Helpers
     {

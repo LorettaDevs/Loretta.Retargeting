@@ -1,4 +1,4 @@
-﻿namespace Loretta.RetargettingCompiler.Core
+﻿namespace Loretta.Retargeting.Core
 {
     internal ref struct StackStringBuilder
     {

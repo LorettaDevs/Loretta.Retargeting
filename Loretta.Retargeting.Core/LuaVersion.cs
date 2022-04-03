@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-namespace Loretta.RetargettingCompiler.Core
+namespace Loretta.Retargeting.Core
 {
     /// <summary>
     /// The set of supported lua versions.

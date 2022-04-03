@@ -1,4 +1,6 @@
-﻿namespace Loretta.RetargettingCompiler.Core.Converters
+﻿using Loretta.Retargeting.Core;
+
+namespace Loretta.Retargeting.Core.Converters
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     internal class ConverterAttribute : Attribute
