@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" Layout="Sugiyama" ZoomLevel="-1" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="944ddc76-c5a8-47cf-b218-c316c04a2e5a1" Category="Comment" Bounds="449.593333333334,179.98,242.246666666667,89.8" Label="Mostly Lua 5.1 with the following from 5.2 and 5.3:&#xD;&#xA;- hex escapes&#xD;&#xA;- whitespace escapes&#xD;&#xA;- unicode escapes" />
+    <Node Id="FiveM" Bounds="544.933333333334,123.9,51.5666666666666,25.96" />
+    <Node Id="GMod" Bounds="730.855000000001,67.8999999999999,53.1066666666666,25.96" Label="GMod" />
+    <Node Id="Lua5.1" Bounds="-3.5527136788005E-15,167.9,57.3733333333334,25.96" Label="Lua 5.1" />
+    <Node Id="Lua5.2" Bounds="87.3733333333334,167.9,57.3733333333334,25.96" Label="Lua 5.2" />
+    <Node Id="Lua5.3" Bounds="268.483333333334,135.9,57.3733333333334,25.96" Label="Lua 5.3" />
+    <Node Id="Lua5.4" Bounds="542.030000000001,67.9,57.3733333333334,25.96" Label="Lua 5.4" />
+    <Node Id="LuaJIT2.0" Bounds="535.148333333334,11.9,71.1366666666668,25.96" Label="LuaJIT 2.0" />
+    <Node Id="LuaJIT2.1" Bounds="721.840000000001,11.8999999999999,71.1366666666668,25.96" Label="LuaJIT 2.1" />
+    <Node Id="Luau" Bounds="732.408333333334,211.9,50,25.96" />
+    <Node Id="PartialInheritance" Category="Comment" Bounds="174.746666666667,0,244.846666666667,105.76" Label="Mostly Lua 5.1 with the following from 5.2:&#xD;&#xA;- goto&#xD;&#xA;- hex escapes&#xD;&#xA;- hex float literals&#xD;&#xA;- whitespace escapes&#xD;&#xA;- no invalid escapes" />
+  </Nodes>
+  <Links>
+    <Link Source="944ddc76-c5a8-47cf-b218-c316c04a2e5a1" Target="Luau" Bounds="691.840026855469,224.880004882813,31.5682983398438,0" />
+    <Link Source="Lua5.1" Target="944ddc76-c5a8-47cf-b218-c316c04a2e5a1" Bounds="54.4593505859375,193.858764648438,386.133972167969,31.021240234375" />
+    <Link Source="Lua5.1" Target="Lua5.2" Bounds="57.3733329772949,180.880004882813,21.0000038146973,0" />
+    <Link Source="Lua5.1" Target="PartialInheritance" Bounds="54.4593505859375,109.568977355957,120.610412597656,58.3322525024414" />
+    <Link Source="Lua5.2" Target="944ddc76-c5a8-47cf-b218-c316c04a2e5a1" Bounds="144.746673583984,182.780715942383,295.907623291016,26.8843383789063" />
+    <Link Source="Lua5.2" Target="Lua5.3" Bounds="144.746673583984,155.514526367188,114.873931884766,20.296875" />
+    <Link Source="Lua5.2" Target="PartialInheritance" Bounds="134.425689697266,110.954414367676,80.5735473632813,56.9455795288086" />
+    <Link Source="Lua5.3" Target="944ddc76-c5a8-47cf-b218-c316c04a2e5a1" Bounds="325.856658935547,156.850067138672,115.065124511719,31.9687652587891" />
+    <Link Source="Lua5.3" Target="FiveM" Bounds="325.856658935547,138.405502319336,210.085296630859,9.216064453125" />
+    <Link Source="Lua5.3" Target="Lua5.4" Bounds="325.856658935547,90.1823196411133,207.439178466797,51.5665664672852" />
+    <Link Source="LuaJIT2.0" Target="GMod" Bounds="606.210021972656,35.5265769958496,116.024475097656,34.802677154541" />
+    <Link Source="LuaJIT2.0" Target="LuaJIT2.1" Bounds="606.284973144531,24.8799991607666,106.555053710938,0" />
+    <Link Source="PartialInheritance" Target="LuaJIT2.0" Bounds="419.593322753906,29.4371871948242,106.601806640625,10.9116668701172" />
+  </Links>
+  <Categories>
+    <Category Id="Comment" Label="Comment" Description="Represents a user defined comment on the diagram" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="Comments" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="Expression" DataType="System.String" />
+    <Property Id="GraphDirection" DataType="Microsoft.VisualStudio.Diagrams.Layout.LayoutOrientation" />
+    <Property Id="GroupLabel" DataType="System.String" />
+    <Property Id="IsEnabled" DataType="System.Boolean" />
+    <Property Id="IsProviderRoot" Label="IsProviderRoot" Description="IsProviderRoot" DataType="System.Boolean" />
+    <Property Id="Label" Label="Label" Description="Displayable label of an Annotatable object" DataType="System.String" />
+    <Property Id="Layout" DataType="System.String" />
+    <Property Id="NavigationActionLabel" Label="NavigationActionLabel" Description="NavigationActionLabel" DataType="System.String" />
+    <Property Id="TargetType" DataType="System.Type" />
+    <Property Id="Value" DataType="System.String" />
+    <Property Id="ValueLabel" DataType="System.String" />
+    <Property Id="ZoomLevel" DataType="System.String" />
+  </Properties>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="Comment" ValueLabel="Has comment">
+      <Condition Expression="HasCategory('Comment')" />
+      <Setter Property="Background" Value="#FFFFFACD" />
+      <Setter Property="Stroke" Value="#FFE5C365" />
+      <Setter Property="StrokeThickness" Value="1" />
+      <Setter Property="NodeRadius" Value="2" />
+      <Setter Property="MaxWidth" Value="250" />
+    </Style>
+  </Styles>
+</DirectedGraph>
