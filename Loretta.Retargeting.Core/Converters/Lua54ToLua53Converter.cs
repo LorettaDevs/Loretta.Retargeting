@@ -23,6 +23,7 @@ namespace Loretta.Retargeting.Core.Converters
                 if (node.Attribute is not null)
                 {
                     var attributeName = node.AttributeName;
+                    var trailing = node.GetTrailingTrivia();
                     node = node.WithAttribute(null);
 
                     var builder = StringBuilderPool.GetBuilder();
@@ -31,7 +32,7 @@ namespace Loretta.Retargeting.Core.Converters
                     var comment = SyntaxFactory.Comment(StringBuilderPool.ToStringAndFree(builder));
 
                     node = node.WithTrailingTrivia(
-                        node.GetTrailingTrivia().Add(SyntaxFactory.Space).Add(comment));
+                        trailing.Prepend(comment).Prepend(SyntaxFactory.Space));
 
                     return node;
                 }
