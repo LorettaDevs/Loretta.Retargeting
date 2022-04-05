@@ -17,9 +17,6 @@ namespace Loretta.Retargeting.Core
         GMod,
         GLua = GMod,
         Luau,
-        RobloxLua = Luau,
-
-        MinVersion = Lua51,
-        MaxVersion = Luau
+        RobloxLua = Luau
     }
 }
