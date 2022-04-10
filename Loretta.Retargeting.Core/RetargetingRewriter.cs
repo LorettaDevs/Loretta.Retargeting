@@ -1,15 +1,15 @@
-﻿using System.Runtime.InteropServices;
-using Loretta.CodeAnalysis;
+﻿using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
-using Loretta.CodeAnalysis.Lua.SymbolDisplay;
+using Loretta.CodeAnalysis.Lua.Syntax;
 
 namespace Loretta.Retargeting.Core
 {
-    internal sealed class RetargetingRewriter : LuaSyntaxRewriter
+    internal sealed partial class RetargetingRewriter : LuaSyntaxRewriter
     {
         private readonly List<Diagnostic> _diagnostics = new();
         private readonly LuaSyntaxOptions _targetOptions;
         private readonly Script _script;
+        private int _localId;
 
         public RetargetingRewriter(LuaSyntaxOptions targetOptions!!, Script script!!)
         {
@@ -18,6 +18,15 @@ namespace Loretta.Retargeting.Core
         }
 
         public IReadOnlyList<Diagnostic> Diagnostics => _diagnostics;
+
+        private SyntaxToken GetImplDetailIdentifier()
+        {
+            var id = Interlocked.Increment(ref _localId);
+            return SyntaxFactory.Identifier($"__impldetail__{id}");
+        }
+
+        private IdentifierNameSyntax GetImplDetailIdentifierName() =>
+            SyntaxFactory.IdentifierName(GetImplDetailIdentifier());
 
         #region Shared Visitors
 
@@ -30,75 +39,78 @@ namespace Loretta.Retargeting.Core
 
         #endregion Shared Visitors
 
-        #region Number Rewriting
-
-        private SyntaxToken VisitNumber(SyntaxToken token)
+        public override SyntaxNode? VisitCompoundAssignmentStatement(CompoundAssignmentStatementSyntax node)
         {
-            // These are only used for the functions at the bottom.
-            const uint Prefix0b = 0x00620030;
-            const uint Prefix0o = 0x006F0030;
-            const uint Prefix0x = 0x00780030;
-            const uint LowerCaseMask = 0b100000 << 16;
-
-            var numberBase = getNumberBase(token);
-
-            // Convert integers
-            if ((_targetOptions.BinaryIntegerFormat != IntegerFormats.Int64 && numberBase == 2
-                || _targetOptions.OctalIntegerFormat != IntegerFormats.Int64 && numberBase == 8
-                || _targetOptions.HexIntegerFormat != IntegerFormats.Int64 && numberBase == 16
-                || _targetOptions.DecimalIntegerFormat != IntegerFormats.Int64 && numberBase == 10
-                )
-                && token.Value is long value1)
+            if (!_targetOptions.AcceptCompoundAssignment)
             {
-                token = token.CopyAnnotationsTo(SyntaxFactory.Literal(
-                    token.LeadingTrivia,
-                    token.Text,
-                    (double) value1,
-                    token.TrailingTrivia));
+                var operationKind = SyntaxFacts.GetCompoundAssignmentOperator(node.Kind()).Value;
+                var operatorKind = SyntaxFacts.GetOperatorTokenKind(operationKind).Value;
+                var identName = GetImplDetailIdentifierName();
 
-                if (!Helpers.CanConvertToDouble(value1))
-                    token = token.WithAdditionalAnnotations(RetargetingAnnotations.CannotConvertToDouble);
-                if (Helpers.CanGeneratePrecisionLossAsDouble(value1))
-                    token = token.WithAdditionalAnnotations(RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
-            }
-
-            // Convert unsupported number formats
-            if (!_targetOptions.AcceptBinaryNumbers && numberBase == 2
-                || !_targetOptions.AcceptOctalNumbers && numberBase == 8
-                || !_targetOptions.AcceptHexFloatLiterals && numberBase == 16 && token.Value is double)
-            {
-                token = token.Value is long valueN
-                    ? token.CopyAnnotationsTo(SyntaxFactory.Literal(
-                        token.LeadingTrivia,
-                        ObjectDisplay.FormatLiteral(valueN, ObjectDisplayOptions.None),
-                        valueN,
-                        token.TrailingTrivia))
-                    : token.CopyAnnotationsTo(SyntaxFactory.Literal(
-                        token.LeadingTrivia,
-                        ObjectDisplay.FormatLiteral((double) token.Value!, ObjectDisplayOptions.None),
-                        (double) token.Value!,
-                        token.TrailingTrivia));
-            }
-
-            return base.VisitToken(token);
-
-            static int getNumberBase(SyntaxToken token)
-            {
-                return lowerNumericPrefix(token.Text) switch
+                switch (node.Variable.Kind())
                 {
-                    Prefix0b => 2,
-                    Prefix0o => 8,
-                    Prefix0x => 16,
-                    _ => 10,
-                };
+                    case SyntaxKind.IdentifierName:
+                        return SyntaxFactory.AssignmentStatement(
+                            SyntaxFactory.SingletonSeparatedList(node.Variable),
+                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
+                                SyntaxFactory.BinaryExpression(
+                                    operationKind,
+                                    node.Variable,
+                                    SyntaxFactory.Token(operatorKind),
+                                    node.Expression)));
+
+                    case SyntaxKind.MemberAccessExpression:
+                    {
+                        var memberAccess = (MemberAccessExpressionSyntax) node.Variable;
+                        var implDetailMemberAccess = memberAccess.WithExpression(identName);
+
+                        var localDecl = SyntaxFactory.LocalVariableDeclarationStatement(
+                            SyntaxFactory.SingletonSeparatedList(
+                                SyntaxFactory.LocalDeclarationName(identName)),
+                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
+                                memberAccess.Expression));
+                        var assignment = SyntaxFactory.AssignmentStatement(
+                            SyntaxFactory.SingletonSeparatedList<PrefixExpressionSyntax>(implDetailMemberAccess),
+                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
+                                SyntaxFactory.BinaryExpression(
+                                    operationKind,
+                                    implDetailMemberAccess,
+                                    SyntaxFactory.Token(operatorKind),
+                                    node.Expression)));
+                        return SyntaxFactory.DoStatement(SyntaxFactory.StatementList(
+                            localDecl,
+                            assignment));
+                    }
+
+                    case SyntaxKind.ElementAccessExpression:
+                    {
+                        var elementAccess = (ElementAccessExpressionSyntax) node.Variable;
+                        var implDetailElementAccess = elementAccess.WithExpression(identName);
+
+                        var localDecl = SyntaxFactory.LocalVariableDeclarationStatement(
+                            SyntaxFactory.SingletonSeparatedList(
+                                SyntaxFactory.LocalDeclarationName(identName)),
+                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
+                                elementAccess.Expression));
+                        var assignment = SyntaxFactory.AssignmentStatement(
+                            SyntaxFactory.SingletonSeparatedList<PrefixExpressionSyntax>(implDetailElementAccess),
+                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
+                                SyntaxFactory.BinaryExpression(
+                                    operationKind,
+                                    implDetailElementAccess,
+                                    SyntaxFactory.Token(operatorKind),
+                                    node.Expression)));
+                        return SyntaxFactory.DoStatement(SyntaxFactory.StatementList(
+                            localDecl,
+                            assignment));
+                    }
+                }
             }
-            static uint lowerNumericPrefix(string text) =>
-                text.Length < 2
-                ? 0
-                : MemoryMarshal.Read<uint>(MemoryMarshal.Cast<char, byte>(text)) | LowerCaseMask;
+
+            return base.VisitCompoundAssignmentStatement(node);
         }
 
-        #endregion Number Rewriting
+        private partial SyntaxToken VisitNumber(SyntaxToken token);
 
         #region Trivia Rewriting
 
