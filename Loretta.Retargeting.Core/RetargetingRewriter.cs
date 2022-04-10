@@ -37,78 +37,39 @@ namespace Loretta.Retargeting.Core
             return base.VisitToken(token);
         }
 
-        #endregion Shared Visitors
-
-        public override SyntaxNode? VisitCompoundAssignmentStatement(CompoundAssignmentStatementSyntax node)
+        public override SyntaxList<TNode> VisitList<TNode>(SyntaxList<TNode> list)
         {
-            if (!_targetOptions.AcceptCompoundAssignment)
+            list = base.VisitList(list);
+
+            if (typeof(TNode) == typeof(StatementSyntax))
             {
-                var operationKind = SyntaxFacts.GetCompoundAssignmentOperator(node.Kind()).Value;
-                var operatorKind = SyntaxFacts.GetOperatorTokenKind(operationKind).Value;
-                var identName = GetImplDetailIdentifierName();
+                var typedList = new List<StatementSyntax>((SyntaxList<StatementSyntax>) (object) list);
 
-                switch (node.Variable.Kind())
+                for (var idx = typedList.Count - 1; idx >= 0; idx--)
                 {
-                    case SyntaxKind.IdentifierName:
-                        return SyntaxFactory.AssignmentStatement(
-                            SyntaxFactory.SingletonSeparatedList(node.Variable),
-                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
-                                SyntaxFactory.BinaryExpression(
-                                    operationKind,
-                                    node.Variable,
-                                    SyntaxFactory.Token(operatorKind),
-                                    node.Expression)));
-
-                    case SyntaxKind.MemberAccessExpression:
+                    var statement = typedList[idx];
+                    if (!_targetOptions.AcceptEmptyStatements
+                        && statement.IsKind(SyntaxKind.EmptyStatement))
                     {
-                        var memberAccess = (MemberAccessExpressionSyntax) node.Variable;
-                        var implDetailMemberAccess = memberAccess.WithExpression(identName);
-
-                        var localDecl = SyntaxFactory.LocalVariableDeclarationStatement(
-                            SyntaxFactory.SingletonSeparatedList(
-                                SyntaxFactory.LocalDeclarationName(identName)),
-                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
-                                memberAccess.Expression));
-                        var assignment = SyntaxFactory.AssignmentStatement(
-                            SyntaxFactory.SingletonSeparatedList<PrefixExpressionSyntax>(implDetailMemberAccess),
-                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
-                                SyntaxFactory.BinaryExpression(
-                                    operationKind,
-                                    implDetailMemberAccess,
-                                    SyntaxFactory.Token(operatorKind),
-                                    node.Expression)));
-                        return SyntaxFactory.DoStatement(SyntaxFactory.StatementList(
-                            localDecl,
-                            assignment));
+                        typedList.RemoveAt(idx);
                     }
-
-                    case SyntaxKind.ElementAccessExpression:
+                    else if (statement.HasAnnotation(RetargetingAnnotations.ToFlatten))
                     {
-                        var elementAccess = (ElementAccessExpressionSyntax) node.Variable;
-                        var implDetailElementAccess = elementAccess.WithExpression(identName);
-
-                        var localDecl = SyntaxFactory.LocalVariableDeclarationStatement(
-                            SyntaxFactory.SingletonSeparatedList(
-                                SyntaxFactory.LocalDeclarationName(identName)),
-                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
-                                elementAccess.Expression));
-                        var assignment = SyntaxFactory.AssignmentStatement(
-                            SyntaxFactory.SingletonSeparatedList<PrefixExpressionSyntax>(implDetailElementAccess),
-                            SyntaxFactory.SingletonSeparatedList<ExpressionSyntax>(
-                                SyntaxFactory.BinaryExpression(
-                                    operationKind,
-                                    implDetailElementAccess,
-                                    SyntaxFactory.Token(operatorKind),
-                                    node.Expression)));
-                        return SyntaxFactory.DoStatement(SyntaxFactory.StatementList(
-                            localDecl,
-                            assignment));
+                        var doStatement = (DoStatementSyntax) statement;
+                        typedList.RemoveAt(idx);
+                        typedList.InsertRange(idx, doStatement.Body.Statements);
                     }
                 }
+
+                list = (SyntaxList<TNode>) (object) SyntaxFactory.List(typedList);
             }
 
-            return base.VisitCompoundAssignmentStatement(node);
+            return list;
         }
+
+        #endregion Shared Visitors
+
+        public override partial SyntaxNode? VisitCompoundAssignmentStatement(CompoundAssignmentStatementSyntax node);
 
         private partial SyntaxToken VisitNumber(SyntaxToken token);
 
