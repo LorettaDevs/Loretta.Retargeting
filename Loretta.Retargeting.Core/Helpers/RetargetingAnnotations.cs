@@ -8,5 +8,6 @@ namespace Loretta.Retargeting.Core
         public static readonly SyntaxAnnotation MightHaveFloatingPointPrecisionLoss = new();
         public static readonly SyntaxAnnotation UnableToRewriteCompoundAssignment = new();
         public static readonly SyntaxAnnotation ToFlatten = new();
+        public static readonly SyntaxAnnotation TargetVersionHasNoBitLibrary = new();
     }
 }
