@@ -5,7 +5,7 @@ using Loretta.CodeAnalysis.Lua;
 
 namespace Loretta.Retargeting.Core
 {
-    internal static class Helpers
+    internal static class StringHelpers
     {
         private static readonly ConditionalWeakTable<string, object> s_commentCache = new();
 

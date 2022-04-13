@@ -111,7 +111,7 @@ namespace Loretta.Retargeting.Core
             {
                 var builder = StringBuilderPool.GetBuilder();
                 builder.Append(trivia.ToFullString()[2..^2]);
-                Helpers.TurnIntoMultiLineComment(builder);
+                StringHelpers.TurnIntoMultiLineComment(builder);
                 var text = StringBuilderPool.ToStringAndFree(builder);
 
                 return SyntaxFactory.Comment(text);

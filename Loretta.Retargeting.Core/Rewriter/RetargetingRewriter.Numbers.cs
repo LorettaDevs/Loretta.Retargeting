@@ -25,9 +25,9 @@ namespace Loretta.Retargeting.Core
                     (double) value1,
                     token.TrailingTrivia));
 
-                if (!Helpers.CanConvertToDouble(value1))
+                if (!StringHelpers.CanConvertToDouble(value1))
                     token = token.WithAdditionalAnnotations(RetargetingAnnotations.CannotConvertToDouble);
-                if (Helpers.CanGeneratePrecisionLossAsDouble(value1))
+                if (StringHelpers.CanGeneratePrecisionLossAsDouble(value1))
                     token = token.WithAdditionalAnnotations(RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
             }
 
