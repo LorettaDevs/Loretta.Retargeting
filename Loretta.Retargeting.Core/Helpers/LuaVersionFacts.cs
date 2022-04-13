@@ -4,7 +4,7 @@ namespace Loretta.Retargeting.Core
 {
     internal static class LuaVersionFacts
     {
-        public static Option<string> BitLibraryGlobalName(LuaVersion version)
+        public static Option<string> GetBitLibraryGlobalName(LuaVersion version)
         {
             return version switch
             {
@@ -15,7 +15,7 @@ namespace Loretta.Retargeting.Core
         }
 
         public static bool HasBitLibrary(LuaVersion version) =>
-            BitLibraryGlobalName(version).IsSome;
+            GetBitLibraryGlobalName(version).IsSome;
 
         public static string GetHumanName(LuaVersion version)
         {

@@ -40,7 +40,7 @@ namespace Loretta.Retargeting.Core.CachedNodes
                 {
                     var global = SyntaxFactory.MemberAccessExpression(
                         ConstantNodes.Global,
-                        LuaVersionFacts.BitLibraryGlobalName(_version).Value);
+                        LuaVersionFacts.GetBitLibraryGlobalName(_version).Value);
                     Interlocked.CompareExchange(ref _global, global, null);
                 }
                 return _global;
