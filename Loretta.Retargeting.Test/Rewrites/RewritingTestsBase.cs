@@ -20,7 +20,7 @@ namespace Loretta.Retargeting.Test.Rewrites
                 NormalizeLineBreaks(inputString),
                 new LuaParseOptions(preOptions));
             var script = new Script(ImmutableArray.Create(inputTree));
-            var rewriter = new RetargetingRewriter(postOptions, script);
+            var rewriter = new RetargetingRewriter(postOptions, script, new Core.CachedNodes.BitLibraryGlobals(LuaVersion.GMod));
 
             return rewriter.Visit(inputTree.GetRoot()).NormalizeWhitespace(eol: "\n");
         }
