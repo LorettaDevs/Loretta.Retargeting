@@ -1,22 +1,23 @@
 ﻿using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
 using Loretta.CodeAnalysis.Lua.Syntax;
+using Loretta.Retargeting.Core.CachedNodes;
 
 namespace Loretta.Retargeting.Core
 {
     internal sealed partial class RetargetingRewriter : LuaSyntaxRewriter
     {
         private readonly List<Diagnostic> _diagnostics = new();
-        private readonly LuaVersion _targetVersion;
         private readonly LuaSyntaxOptions _targetOptions;
         private readonly Script _script;
+        private readonly BitLibraryGlobals _bitLibraryGlobals;
         private int _localId;
 
-        public RetargetingRewriter(LuaVersion targetVersion, LuaSyntaxOptions targetOptions!!, Script script!!)
+        public RetargetingRewriter(LuaSyntaxOptions targetOptions!!, Script script!!, BitLibraryGlobals bitLibraryGlobals!!)
         {
-            _targetVersion = targetVersion;
             _targetOptions = targetOptions;
             _script = script;
+            _bitLibraryGlobals = bitLibraryGlobals;
         }
 
         public IReadOnlyList<Diagnostic> Diagnostics => _diagnostics;
