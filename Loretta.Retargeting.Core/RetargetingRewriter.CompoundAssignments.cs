@@ -12,7 +12,6 @@ namespace Loretta.Retargeting.Core
             {
                 var operationKind = SyntaxFacts.GetCompoundAssignmentOperator(node.Kind()).Value;
                 var operatorKind = SyntaxFacts.GetOperatorTokenKind(operationKind).Value;
-                var identName = GetImplDetailIdentifierName();
 
                 switch (node.Variable.Kind())
                 {
@@ -29,6 +28,7 @@ namespace Loretta.Retargeting.Core
                     case SyntaxKind.MemberAccessExpression:
                     {
                         var memberAccess = (MemberAccessExpressionSyntax) node.Variable;
+                        var identName = GetImplDetailIdentifierName();
                         var implDetailMemberAccess = memberAccess.WithExpression(identName);
 
                         var localDecl = SyntaxFactory.LocalVariableDeclarationStatement(
@@ -53,6 +53,7 @@ namespace Loretta.Retargeting.Core
                     case SyntaxKind.ElementAccessExpression:
                     {
                         var elementAccess = (ElementAccessExpressionSyntax) node.Variable;
+                        var identName = GetImplDetailIdentifierName();
                         var implDetailElementAccess = elementAccess.WithExpression(identName);
 
                         var localDecl = SyntaxFactory.LocalVariableDeclarationStatement(
