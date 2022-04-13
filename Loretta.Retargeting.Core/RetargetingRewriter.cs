@@ -7,12 +7,14 @@ namespace Loretta.Retargeting.Core
     internal sealed partial class RetargetingRewriter : LuaSyntaxRewriter
     {
         private readonly List<Diagnostic> _diagnostics = new();
+        private readonly LuaVersion _targetVersion;
         private readonly LuaSyntaxOptions _targetOptions;
         private readonly Script _script;
         private int _localId;
 
-        public RetargetingRewriter(LuaSyntaxOptions targetOptions!!, Script script!!)
+        public RetargetingRewriter(LuaVersion targetVersion, LuaSyntaxOptions targetOptions!!, Script script!!)
         {
+            _targetVersion = targetVersion;
             _targetOptions = targetOptions;
             _script = script;
         }
