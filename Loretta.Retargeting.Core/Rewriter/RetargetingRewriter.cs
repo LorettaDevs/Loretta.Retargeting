@@ -40,6 +40,20 @@ namespace Loretta.Retargeting.Core
             return base.VisitToken(token);
         }
 
+        public override SyntaxNode? VisitUnaryExpression(UnaryExpressionSyntax node)
+        {
+            if (RetargetingSyntaxFacts.IsBitwiseExpression(node.Kind()))
+                return VisitBitwiseUnaryExpression(node);
+            return base.VisitUnaryExpression(node);
+        }
+
+        public override SyntaxNode? VisitBinaryExpression(BinaryExpressionSyntax node)
+        {
+            if (RetargetingSyntaxFacts.IsBitwiseExpression(node.Kind()))
+                return VisitBitwiseBinaryExpression(node);
+            return base.VisitBinaryExpression(node);
+        }
+
         public override SyntaxList<TNode> VisitList<TNode>(SyntaxList<TNode> list)
         {
             list = base.VisitList(list);
@@ -73,6 +87,10 @@ namespace Loretta.Retargeting.Core
         #endregion Shared Visitors
 
         public override partial SyntaxNode? VisitCompoundAssignmentStatement(CompoundAssignmentStatementSyntax node);
+
+        private partial SyntaxNode? VisitBitwiseUnaryExpression(UnaryExpressionSyntax expression);
+
+        private partial SyntaxNode? VisitBitwiseBinaryExpression(BinaryExpressionSyntax expression);
 
         private partial SyntaxToken VisitNumber(SyntaxToken token);
 
