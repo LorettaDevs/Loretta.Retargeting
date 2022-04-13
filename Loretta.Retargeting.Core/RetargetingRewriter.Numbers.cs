@@ -53,10 +53,9 @@ namespace Loretta.Retargeting.Core
 
             static int getNumberBase(SyntaxToken token)
             {
-                // These are only used for the functions at the bottom.
-                const uint Prefix0b = 0x00620030;
-                const uint Prefix0o = 0x006F0030;
-                const uint Prefix0x = 0x00780030;
+                const uint Prefix0b = '0' | ((uint) 'b' << 16);
+                const uint Prefix0o = '0' | ((uint) 'o' << 16);
+                const uint Prefix0x = '0' | ((uint) 'x' << 16);
                 return lowerNumericPrefix(token.Text) switch
                 {
                     Prefix0b => 2,
@@ -68,7 +67,7 @@ namespace Loretta.Retargeting.Core
 
             static uint lowerNumericPrefix(string text)
             {
-                const uint LowerCaseMask = 0b100000 << 16;
+                const uint LowerCaseMask = 0b100000U << 16;
                 if (text.Length < 2)
                     return 0;
                 return MemoryMarshal.Read<uint>(MemoryMarshal.Cast<char, byte>(text)) | LowerCaseMask;
