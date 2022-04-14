@@ -51,13 +51,13 @@ namespace Loretta.Retargeting.Core
                                  .WithAdditionalAnnotations(RetargetingAnnotations.TargetVersionHasNoBitLibrary);
             }
 
-            if (SyntaxHelpers.GetConstantValue(left) is { IsSome: true, Value: long leftValue }
+            if (SyntaxHelpers.GetConstantValue(expression.Left) is { IsSome: true, Value: long leftValue }
                 && BitOperations.LeadingZeroCount((ulong) leftValue) < 32)
             {
                 left = left.WithAdditionalAnnotations(RetargetingAnnotations.OperandHasMoreThan32Bits);
             }
 
-            if (SyntaxHelpers.GetConstantValue(right) is { IsSome: true, Value: long rightValue }
+            if (SyntaxHelpers.GetConstantValue(expression.Right) is { IsSome: true, Value: long rightValue }
                 && BitOperations.LeadingZeroCount((ulong) rightValue) < 32)
             {
                 right = right.WithAdditionalAnnotations(RetargetingAnnotations.OperandHasMoreThan32Bits);
