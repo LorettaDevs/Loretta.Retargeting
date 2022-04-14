@@ -8,8 +8,14 @@ namespace Loretta.Retargeting.Core
         {
             return version switch
             {
-                LuaVersion.Lua53 or LuaVersion.Lua54 or LuaVersion.FiveM or LuaVersion.Luau => "bit32",
-                LuaVersion.LuaJIT20 or LuaVersion.LuaJIT21 or LuaVersion.GMod => "bit",
+                LuaVersion.Lua52
+                or LuaVersion.Lua53
+                or LuaVersion.Lua54
+                or LuaVersion.FiveM
+                or LuaVersion.Luau => "bit32",
+                LuaVersion.LuaJIT20
+                or LuaVersion.LuaJIT21
+                or LuaVersion.GMod => "bit",
                 _ => Option.None<string>()
             };
         }
