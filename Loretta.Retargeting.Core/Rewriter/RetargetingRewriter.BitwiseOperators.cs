@@ -20,7 +20,7 @@ namespace Loretta.Retargeting.Core
                                  .WithAdditionalAnnotations(RetargetingAnnotations.TargetVersionHasNoBitLibrary);
             }
 
-            if (SyntaxHelpers.GetConstantValue(operand) is { IsSome: true, Value: long value }
+            if (SyntaxHelpers.GetConstantValue(expression.Operand) is { IsSome: true, Value: long value }
                 && BitOperations.LeadingZeroCount((ulong) value) < 32)
             {
                 operand = operand.WithAdditionalAnnotations(RetargetingAnnotations.OperandHasMoreThan32Bits);
