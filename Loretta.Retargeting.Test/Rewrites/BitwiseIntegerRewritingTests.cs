@@ -16,7 +16,7 @@ namespace Loretta.Retargeting.Test.Rewrites
         public void RetargetingRewriter_GeneratesAnnotationsForBitwiseOperators_WhenTargetVersionDoesNotHaveTheBitLibrary(string text)
         {
             var preOptions = LuaSyntaxOptions.Lua54;
-            var postOptions = LuaSyntaxOptions.Lua52;
+            var postOptions = LuaSyntaxOptions.Lua51;
             var node = RewriteNode(
                 preOptions,
                 postOptions,
@@ -36,14 +36,14 @@ namespace Loretta.Retargeting.Test.Rewrites
         public void RetargetingRewriter_GeneratesAnnotationsForOperandsOfUnaryExpressions_WhenTheOperandsExceed32Bits()
         {
             var preOptions = LuaSyntaxOptions.Lua54;
-            var postOptions = preOptions.With(acceptBitwiseOperators: false);
+            var postOptions = LuaSyntaxOptions.Lua52;
             var node = RewriteNode(
-preOptions,
+                preOptions,
                 postOptions,
                 """
                 local x = ~0x100000000
                 """,
-                version: LuaVersion.Luau);
+                version: LuaVersion.Lua52);
 
             var compilationUnit = Assert.IsType<CompilationUnitSyntax>(node);
             var singleStatement = Assert.Single(compilationUnit.Statements.Statements);
@@ -66,12 +66,12 @@ preOptions,
         public void RetargetingRewriter_GeneratesAnnotationsForOperandsOfBinaryExpressions_WhenTheOperandsExceed32Bits(string text)
         {
             var preOptions = LuaSyntaxOptions.Lua54;
-            var postOptions = preOptions.With(acceptBitwiseOperators: false);
+            var postOptions = LuaSyntaxOptions.Lua52;
             var node = RewriteNode(
                 preOptions,
                 postOptions,
                 text,
-                version: LuaVersion.Luau);
+                version: LuaVersion.Lua52);
 
             var compilationUnit = Assert.IsType<CompilationUnitSyntax>(node);
             var singleStatement = Assert.Single(compilationUnit.Statements.Statements);
