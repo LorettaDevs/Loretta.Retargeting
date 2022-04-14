@@ -1,4 +1,5 @@
-﻿using Loretta.CodeAnalysis;
+﻿using System.Numerics;
+using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
 using Loretta.CodeAnalysis.Lua.Syntax;
 
@@ -9,10 +10,20 @@ namespace Loretta.Retargeting.Core
         private partial SyntaxNode? VisitBitwiseUnaryExpression(UnaryExpressionSyntax expression)
         {
             var operand = (ExpressionSyntax) Visit(expression.Operand);
+
+            if (_targetOptions.AcceptBitwiseOperators)
+                return expression.WithOperand(operand);
+
             if (!_bitLibraryGlobals.HasBitLibrary)
             {
                 return expression.WithOperand(operand)
                                  .WithAdditionalAnnotations(RetargetingAnnotations.TargetVersionHasNoBitLibrary);
+            }
+
+            if (SyntaxHelpers.GetConstantValue(operand) is { IsSome: true, Value: long value }
+                && BitOperations.LeadingZeroCount((ulong) value) < 32)
+            {
+                operand = operand.WithAdditionalAnnotations(RetargetingAnnotations.OperandHasMoreThan32Bits);
             }
 
             if (expression.IsKind(SyntaxKind.BitwiseNotExpression))
@@ -30,10 +41,26 @@ namespace Loretta.Retargeting.Core
         {
             var left = (ExpressionSyntax) Visit(expression.Left);
             var right = (ExpressionSyntax) Visit(expression.Right);
+
+            if (_targetOptions.AcceptBitwiseOperators)
+                return expression.Update(left, expression.OperatorToken, right);
+
             if (!_bitLibraryGlobals.HasBitLibrary)
             {
                 return expression.Update(left, expression.OperatorToken, right)
                                  .WithAdditionalAnnotations(RetargetingAnnotations.TargetVersionHasNoBitLibrary);
+            }
+
+            if (SyntaxHelpers.GetConstantValue(left) is { IsSome: true, Value: long leftValue }
+                && BitOperations.LeadingZeroCount((ulong) leftValue) < 32)
+            {
+                left = left.WithAdditionalAnnotations(RetargetingAnnotations.OperandHasMoreThan32Bits);
+            }
+
+            if (SyntaxHelpers.GetConstantValue(right) is { IsSome: true, Value: long rightValue }
+                && BitOperations.LeadingZeroCount((ulong) rightValue) < 32)
+            {
+                right = right.WithAdditionalAnnotations(RetargetingAnnotations.OperandHasMoreThan32Bits);
             }
 
             var function = expression.Kind() switch
