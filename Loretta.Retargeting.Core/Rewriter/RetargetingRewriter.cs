@@ -13,11 +13,11 @@ namespace Loretta.Retargeting.Core
         private readonly BitLibraryGlobals _bitLibraryGlobals;
         private int _localId;
 
-        public RetargetingRewriter(LuaSyntaxOptions targetOptions!!, Script script!!, BitLibraryGlobals bitLibraryGlobals!!)
+        public RetargetingRewriter(LuaSyntaxOptions targetOptions, Script script, BitLibraryGlobals bitLibraryGlobals)
         {
-            _targetOptions = targetOptions;
-            _script = script;
-            _bitLibraryGlobals = bitLibraryGlobals;
+            _targetOptions = targetOptions ?? throw new System.ArgumentNullException(nameof(targetOptions));
+            _script = script ?? throw new System.ArgumentNullException(nameof(script));
+            _bitLibraryGlobals = bitLibraryGlobals ?? throw new System.ArgumentNullException(nameof(bitLibraryGlobals));
         }
 
         public IReadOnlyList<Diagnostic> Diagnostics => _diagnostics;
