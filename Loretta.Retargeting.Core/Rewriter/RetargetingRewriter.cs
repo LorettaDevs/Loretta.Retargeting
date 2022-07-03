@@ -7,7 +7,6 @@ namespace Loretta.Retargeting.Core
 {
     internal sealed partial class RetargetingRewriter : LuaSyntaxRewriter
     {
-        private readonly List<Diagnostic> _diagnostics = new();
         private readonly LuaSyntaxOptions _targetOptions;
         private readonly Script _script;
         private readonly BitLibraryGlobals _bitLibraryGlobals;
@@ -19,8 +18,6 @@ namespace Loretta.Retargeting.Core
             _script = script ?? throw new System.ArgumentNullException(nameof(script));
             _bitLibraryGlobals = bitLibraryGlobals ?? throw new System.ArgumentNullException(nameof(bitLibraryGlobals));
         }
-
-        public IReadOnlyList<Diagnostic> Diagnostics => _diagnostics;
 
         private SyntaxToken GetImplDetailIdentifier()
         {
