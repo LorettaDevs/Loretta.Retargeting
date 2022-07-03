@@ -1,5 +1,6 @@
-using Loretta.CodeAnalysis;
+﻿using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
+using Loretta.CodeAnalysis.Lua.SymbolDisplay;
 using Loretta.CodeAnalysis.Lua.Syntax;
 using Loretta.Retargeting.Core.CachedNodes;
 
@@ -35,6 +36,21 @@ namespace Loretta.Retargeting.Core
             if (token.IsKind(SyntaxKind.NumericLiteralToken))
                 return VisitNumber(token);
             return base.VisitToken(token);
+        }
+
+        public override SyntaxNode? VisitLiteralExpression(LiteralExpressionSyntax node)
+        {
+            if (node.IsKind(SyntaxKind.HashStringLiteralExpression))
+            {
+                ulong value = (ulong) node.Token.Value!;
+
+                return SyntaxFactory.LiteralExpression(
+                    SyntaxKind.NumericalLiteralExpression,
+                    VisitNumber(SyntaxFactory.Literal(
+                        ObjectDisplay.FormatLiteral(value, ObjectDisplayOptions.UseHexadecimalNumbers),
+                        value)));
+            }
+            return base.VisitLiteralExpression(node);
         }
 
         public override SyntaxNode? VisitUnaryExpression(UnaryExpressionSyntax node)
