@@ -5,7 +5,8 @@ A library as well as a console tool that re-targets code from one lua version to
 
 - [x] FiveM Hash Strings (`LuaSyntaxOptions.AcceptHashStrings`)
 - [x] LuaJIT Identifier Special Characters (`LuaSyntaxOptions.UseLuaJitIdentifierRules`)
-- [-] Bitwise Operators (`LuaSyntaxOptions.AcceptBitwiseOperators`)
+- [ ] Bitwise Operators (`LuaSyntaxOptions.AcceptBitwiseOperators`)
+    - [x] Call the function from the bit library if it is available
     - [ ] Implement the bitwise operators using math operators in runtimes that don't have the bit library
 - [ ] String Escapes
     - [ ] `\z` Escape (`LuaSyntaxOptions.AcceptWhitespaceEscape`)
@@ -30,7 +31,7 @@ A library as well as a console tool that re-targets code from one lua version to
     - [x] Octal (`LuaSyntaxOptions.AcceptOctalNumbers`)
 - [x] C Comment Syntax (`LuaSyntaxOptions.AcceptCCommentSyntax`)
 - [ ] Floor Division (`LuaSyntaxOptions.AcceptFloorDivision`)
-- [-] LuaJIT Number Suffixes (`LuaSyntaxOptions.AcceptLuaJITNumberSuffixes`)
+- [ ] LuaJIT Number Suffixes (`LuaSyntaxOptions.AcceptLuaJITNumberSuffixes`)
     - [x] `LL` suffix
     - [x] `ULL` suffix
     - [ ] `i` suffix
