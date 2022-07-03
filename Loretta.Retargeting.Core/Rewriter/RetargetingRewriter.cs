@@ -35,6 +35,10 @@ namespace Loretta.Retargeting.Core
         {
             if (token.IsKind(SyntaxKind.NumericLiteralToken))
                 return VisitNumber(token);
+            else if (token.IsKind(SyntaxKind.IdentifierToken)
+                && !_targetOptions.UseLuaJitIdentifierRules
+                && token.Text.Any(ch => ch >= 0x7F))
+                return token.WithAdditionalAnnotations(RetargetingAnnotations.IdentifierHasLuajitOnlyChars);
             return base.VisitToken(token);
         }
 
