@@ -16,6 +16,7 @@ namespace Loretta.Retargeting.Core
                 || _targetOptions.OctalIntegerFormat != IntegerFormats.Int64 && numberBase == 8
                 || _targetOptions.HexIntegerFormat != IntegerFormats.Int64 && numberBase == 16
                 || _targetOptions.DecimalIntegerFormat != IntegerFormats.Int64 && numberBase == 10
+                || !_targetOptions.AcceptLuaJITNumberSuffixes && token.Text.EndsWith("ll", StringComparison.OrdinalIgnoreCase)
                 )
                 && token.Value is long value1)
             {
@@ -28,6 +29,21 @@ namespace Loretta.Retargeting.Core
                 if (!Helpers.CanConvertToDouble(value1))
                     token = token.WithAdditionalAnnotations(RetargetingAnnotations.CannotConvertToDouble);
                 if (Helpers.CanGeneratePrecisionLossAsDouble(value1))
+                    token = token.WithAdditionalAnnotations(RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
+            }
+            else if (!_targetOptions.AcceptLuaJITNumberSuffixes
+                && token.Text.EndsWith("ull", StringComparison.OrdinalIgnoreCase)
+                && token.Value is ulong value2)
+            {
+                token = token.CopyAnnotationsTo(SyntaxFactory.Literal(
+                    token.LeadingTrivia,
+                    token.Text,
+                    (double) value2,
+                    token.TrailingTrivia));
+
+                if (!Helpers.CanConvertToDouble(value2))
+                    token = token.WithAdditionalAnnotations(RetargetingAnnotations.CannotConvertToDouble);
+                if (Helpers.CanGeneratePrecisionLossAsDouble(value2))
                     token = token.WithAdditionalAnnotations(RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
             }
 

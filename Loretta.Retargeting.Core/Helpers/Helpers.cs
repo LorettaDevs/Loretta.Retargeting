@@ -141,7 +141,19 @@ namespace Loretta.Retargeting.Core
             return value == converted;
         }
 
+        public static bool CanConvertToDouble(ulong value)
+        {
+            var converted = (ulong) (double) value;
+            return value == converted;
+        }
+
         public static bool CanGeneratePrecisionLossAsDouble(long value)
+        {
+            return value - Math.BitDecrement(value) > 1
+                || Math.BitIncrement(value) - value > 1;
+        }
+
+        public static bool CanGeneratePrecisionLossAsDouble(ulong value)
         {
             return value - Math.BitDecrement(value) > 1
                 || Math.BitIncrement(value) - value > 1;
