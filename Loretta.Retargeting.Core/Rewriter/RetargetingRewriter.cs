@@ -42,7 +42,7 @@ namespace Loretta.Retargeting.Core
         {
             if (node.IsKind(SyntaxKind.HashStringLiteralExpression))
             {
-                ulong value = (ulong) node.Token.Value!;
+                var value = (uint) node.Token.Value!;
 
                 return SyntaxFactory.LiteralExpression(
                     SyntaxKind.NumericalLiteralExpression,
