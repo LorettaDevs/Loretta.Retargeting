@@ -1,4 +1,4 @@
-﻿using Loretta.CodeAnalysis;
+using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
 using Loretta.CodeAnalysis.Lua.Syntax;
 using Loretta.Retargeting.Core.CachedNodes;
@@ -129,7 +129,7 @@ namespace Loretta.Retargeting.Core
             {
                 var builder = StringBuilderPool.GetBuilder();
                 builder.Append(trivia.ToFullString()[2..^2]);
-                StringHelpers.TurnIntoMultiLineComment(builder);
+                Helpers.TurnIntoMultiLineComment(builder);
                 var text = StringBuilderPool.ToStringAndFree(builder);
 
                 return SyntaxFactory.Comment(text);
