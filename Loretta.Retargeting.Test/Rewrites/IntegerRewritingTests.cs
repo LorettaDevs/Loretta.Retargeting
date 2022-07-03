@@ -15,18 +15,32 @@ namespace Loretta.Retargeting.Test.Rewrites
             var preOptions = LuaSyntaxOptions.AllWithIntegers;
             var postOptions = @base switch
             {
-                2 => preOptions.With(binaryIntegerFormat: IntegerFormats.NotSupported),
-                8 => preOptions.With(octalIntegerFormat: IntegerFormats.NotSupported),
-                10 => preOptions.With(decimalIntegerFormat: IntegerFormats.NotSupported),
-                16 => preOptions.With(hexIntegerFormat: IntegerFormats.NotSupported),
+                2 or 102 or 202 => preOptions.With(binaryIntegerFormat: IntegerFormats.NotSupported, acceptLuaJITNumberSuffixes: false),
+                8 => preOptions.With(octalIntegerFormat: IntegerFormats.NotSupported, acceptLuaJITNumberSuffixes: false),
+                10 or 110 or 210 => preOptions.With(decimalIntegerFormat: IntegerFormats.NotSupported, acceptLuaJITNumberSuffixes: false),
+                16 or 116 or 216 => preOptions.With(hexIntegerFormat: IntegerFormats.NotSupported, acceptLuaJITNumberSuffixes: false),
                 _ => throw new ArgumentOutOfRangeException(nameof(@base))
             };
             var prefix = @base switch
             {
-                2 => "0b",
+                2 or 102 or 202 => "0b",
                 8 => "0o",
-                10 => "",
-                16 => "0x",
+                10 or 110 or 210 => "",
+                16 or 116 or 216 => "0x",
+                _ => throw new ArgumentOutOfRangeException(nameof(@base))
+            };
+            var suffix = @base switch
+            {
+                102 or 110 or 116 => "LL",
+                202 or 210 or 216 => "ULL",
+                _ => ""
+            };
+            @base = @base switch
+            {
+                8 => @base,
+                2 or 102 or 202 => 2,
+                10 or 110 or 210 => 10,
+                16 or 116 or 216 => 16,
                 _ => throw new ArgumentOutOfRangeException(nameof(@base))
             };
 
@@ -34,7 +48,7 @@ namespace Loretta.Retargeting.Test.Rewrites
                 preOptions,
                 postOptions,
                 $"""
-                local x = {prefix}{Convert.ToString(value, @base)}
+                local x = {prefix}{Convert.ToString(value, @base)}{suffix}
                 """);
 
             var compilationUnit = Assert.IsType<CompilationUnitSyntax>(node);
@@ -51,6 +65,14 @@ namespace Loretta.Retargeting.Test.Rewrites
             AssertCore(2, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
 
         [Fact]
+        public void RetargetingRewriter_MarksUnconvertableLLBinaryIntegers() =>
+            AssertCore(102, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
+
+        [Fact]
+        public void RetargetingRewriter_MarksUnconvertableULLBinaryIntegers() =>
+            AssertCore(202, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
+
+        [Fact]
         public void RetargetingRewriter_MarksUnconvertableOctalIntegers() =>
             AssertCore(8, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
 
@@ -59,12 +81,36 @@ namespace Loretta.Retargeting.Test.Rewrites
             AssertCore(10, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
 
         [Fact]
+        public void RetargetingRewriter_MarksUnconvertableLLDecimalIntegers() =>
+            AssertCore(110, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
+
+        [Fact]
+        public void RetargetingRewriter_MarksUnconvertableULLDecimalIntegers() =>
+            AssertCore(210, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
+
+        [Fact]
         public void RetargetingRewriter_MarksUnconvertableHexIntegers() =>
             AssertCore(16, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
 
         [Fact]
+        public void RetargetingRewriter_MarksUnconvertableLLHexIntegers() =>
+            AssertCore(116, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
+
+        [Fact]
+        public void RetargetingRewriter_MarksUnconvertableULLHexIntegers() =>
+            AssertCore(216, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);
+
+        [Fact]
         public void RetargetingRewriter_MarksBinaryIntegersWithOverflowPotential() =>
             AssertCore(2, PRECISION_LOSS, RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
+
+        [Fact]
+        public void RetargetingRewriter_MarksLLBinaryIntegersWithOverflowPotential() =>
+            AssertCore(102, PRECISION_LOSS, RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
+
+        [Fact]
+        public void RetargetingRewriter_MarksULLBinaryIntegersWithOverflowPotential() =>
+            AssertCore(202, PRECISION_LOSS, RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
 
         [Fact]
         public void RetargetingRewriter_MarksOctalIntegersWithOverflowPotential() =>
@@ -75,7 +121,23 @@ namespace Loretta.Retargeting.Test.Rewrites
             AssertCore(10, PRECISION_LOSS, RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
 
         [Fact]
+        public void RetargetingRewriter_MarksLLDecimalIntegersWithOverflowPotential() =>
+            AssertCore(110, PRECISION_LOSS, RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
+
+        [Fact]
+        public void RetargetingRewriter_MarksULLDecimalIntegersWithOverflowPotential() =>
+            AssertCore(210, PRECISION_LOSS, RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
+
+        [Fact]
         public void RetargetingRewriter_MarksHexIntegersWithOverflowPotential() =>
             AssertCore(16, PRECISION_LOSS, RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
+
+        [Fact]
+        public void RetargetingRewriter_MarksLLHexIntegersWithOverflowPotential() =>
+            AssertCore(116, PRECISION_LOSS, RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
+
+        [Fact]
+        public void RetargetingRewriter_MarksULLHexIntegersWithOverflowPotential() =>
+            AssertCore(216, PRECISION_LOSS, RetargetingAnnotations.MightHaveFloatingPointPrecisionLoss);
     }
 }
