@@ -79,7 +79,7 @@ namespace Loretta.Retargeting.Core
             return maxLength;
         }
 
-        public static SyntaxTrivia MultiLineComment(string text, int maxStack = 512)
+        public static SyntaxTrivia MultiLineComment(string text, int maxStack = Constants.MaxStackAlloc)
         {
             if (!s_commentCache.TryGetValue(text, out var objComment))
             {
