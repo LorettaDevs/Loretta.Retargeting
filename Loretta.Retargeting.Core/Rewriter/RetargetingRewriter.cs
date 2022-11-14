@@ -34,7 +34,13 @@ namespace Loretta.Retargeting.Core
         public override SyntaxToken VisitToken(SyntaxToken token)
         {
             if (token.IsKind(SyntaxKind.NumericLiteralToken))
+            {
                 return VisitNumber(token);
+            }
+            else if (token.IsKind(SyntaxKind.StringLiteralToken))
+            {
+                return VisitString(token);
+            }
             else if (token.IsKind(SyntaxKind.IdentifierToken)
                 && !_targetOptions.UseLuaJitIdentifierRules
                 && token.Text.Any(ch => ch >= 0x7F))
@@ -108,6 +114,8 @@ namespace Loretta.Retargeting.Core
         private partial SyntaxNode? VisitBitwiseBinaryExpression(BinaryExpressionSyntax expression);
 
         private partial SyntaxToken VisitNumber(SyntaxToken token);
+
+        private partial SyntaxToken VisitString(SyntaxToken token);
 
         #region Trivia Rewriting
 

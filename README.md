@@ -8,10 +8,10 @@ A library as well as a console tool that re-targets code from one lua version to
 - [ ] Bitwise Operators (`LuaSyntaxOptions.AcceptBitwiseOperators`)
     - [x] Call the function from the bit library if it is available
     - [ ] Implement the bitwise operators using math operators in runtimes that don't have the bit library
-- [ ] String Escapes
-    - [ ] `\z` Escape (`LuaSyntaxOptions.AcceptWhitespaceEscape`)
-    - [ ] `\u` Escape (`LuaSyntaxOptions.AcceptUnicodeEscape`)
-    - [ ] `\x` Escape (`LuaSyntaxOptions.AcceptHexEscapesInStrings`)
+- [x] String Escapes
+    - [x] `\z` Escape (`LuaSyntaxOptions.AcceptWhitespaceEscape`)
+    - [x] `\u` Escape (`LuaSyntaxOptions.AcceptUnicodeEscape`)
+    - [x] `\x` Escape (`LuaSyntaxOptions.AcceptHexEscapesInStrings`)
 - [ ] `continue` (`LuaSyntaxOptions.ContinueType`)
 - [ ] Luau (Roblox Lua) `if` Expressions (`LuaSyntaxOptions.AcceptIfExpressions`)
 - [x] Integers
