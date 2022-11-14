@@ -38,7 +38,10 @@ namespace Loretta.Retargeting.Core
             else if (token.IsKind(SyntaxKind.IdentifierToken)
                 && !_targetOptions.UseLuaJitIdentifierRules
                 && token.Text.Any(ch => ch >= 0x7F))
+            {
                 return token.WithAdditionalAnnotations(RetargetingAnnotations.IdentifierHasLuajitOnlyChars);
+            }
+
             return base.VisitToken(token);
         }
 
@@ -57,18 +60,13 @@ namespace Loretta.Retargeting.Core
             return base.VisitLiteralExpression(node);
         }
 
-        public override SyntaxNode? VisitUnaryExpression(UnaryExpressionSyntax node)
-        {
-            if (RetargetingSyntaxFacts.IsBitwiseExpression(node.Kind()))
-                return VisitBitwiseUnaryExpression(node);
-            return base.VisitUnaryExpression(node);
-        }
+        public override SyntaxNode? VisitUnaryExpression(UnaryExpressionSyntax node) => RetargetingSyntaxFacts.IsBitwiseExpression(node.Kind()) ? VisitBitwiseUnaryExpression(node) : base.VisitUnaryExpression(node);
 
         public override SyntaxNode? VisitBinaryExpression(BinaryExpressionSyntax node)
         {
-            if (RetargetingSyntaxFacts.IsBitwiseExpression(node.Kind()))
-                return VisitBitwiseBinaryExpression(node);
-            return base.VisitBinaryExpression(node);
+            return RetargetingSyntaxFacts.IsBitwiseExpression(node.Kind())
+                ? VisitBitwiseBinaryExpression(node)
+                : base.VisitBinaryExpression(node);
         }
 
         public override SyntaxList<TNode> VisitList<TNode>(SyntaxList<TNode> list)
@@ -132,10 +130,10 @@ namespace Loretta.Retargeting.Core
                 && trivia.ToFullString().StartsWith("//", StringComparison.Ordinal))
             {
                 var builder = StringBuilderPool.GetBuilder();
-                builder.Append("--");
+                _ = builder.Append("--");
                 if (trivia.ToFullString()[2] == '[')
-                    builder.Append(' ');
-                builder.Append(trivia.ToFullString()[2..]);
+                    _ = builder.Append(' ');
+                _ = builder.Append(trivia.ToFullString()[2..]);
                 var text = StringBuilderPool.ToStringAndFree(builder);
 
                 return SyntaxFactory.Comment(text);
@@ -145,7 +143,7 @@ namespace Loretta.Retargeting.Core
                 && trivia.ToFullString().StartsWith("/*", StringComparison.Ordinal))
             {
                 var builder = StringBuilderPool.GetBuilder();
-                builder.Append(trivia.ToFullString()[2..^2]);
+                _ = builder.Append(trivia.ToFullString()[2..^2]);
                 Helpers.TurnIntoMultiLineComment(builder);
                 var text = StringBuilderPool.ToStringAndFree(builder);
 
