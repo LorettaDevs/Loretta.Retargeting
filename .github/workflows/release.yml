@@ -28,7 +28,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
-          dotnet-quality: preview
       - name: Build Windows x64
         run: dotnet publish -c Release -r win-x64 -p:CompilationMode=aot -p:Version=${{ inputs.version }} --self-contained -o publish\win-x64\ src/Host/Loretta.Retargeting.Host.csproj
       - name: Build Other Windows Releases
@@ -57,7 +56,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
-          dotnet-quality: preview
       - name: Install Compilation dependencies
         run: |
           sudo apt-get update
