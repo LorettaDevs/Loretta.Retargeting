@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Loretta.Retargeting.Core\Loretta.Retargeting.Core.csproj" />
+      <ProjectReference Include="..\src\Core\Loretta.Retargeting.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
