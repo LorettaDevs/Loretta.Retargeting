@@ -36,13 +36,14 @@ namespace Loretta.Retargeting.Core
                     var canUseUnicode = _targetOptions.AcceptUnicodeEscape;
                     var canUseWhitespace = _targetOptions.AcceptWhitespaceEscape;
 
+                    var type = match.Groups["type"].ValueSpan[0];
                     var value = match.Groups["value"].ValueSpan;
-                    return match.Groups["type"].ValueSpan switch
+                    return type switch
                     {
-                        "u" when !canUseUnicode => EncodeCharToUtf8((char) ushort.Parse(value), canUseHex),
-                        "x" when !canUseHex => $"\\{ushort.Parse(value):000}",
-                        "z" when !canUseWhitespace => string.Empty,
-                        _ => throw new Exception("Unreacheable point reached (fallthrough string rewrite)"),
+                        'u' when !canUseUnicode => EncodeCharToUtf8((char) ushort.Parse(value, System.Globalization.NumberStyles.AllowHexSpecifier), canUseHex),
+                        'x' when !canUseHex => $"\\{ushort.Parse(value, System.Globalization.NumberStyles.AllowHexSpecifier):000}",
+                        'z' when !canUseWhitespace => string.Empty,
+                        _ => match.Value
                     };
                 });
 
