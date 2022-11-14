@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32317.152
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loretta.Retargeting.Host", "Loretta.Retargeting.Host\Loretta.Retargeting.Host.csproj", "{AF6E74E3-413F-4DE0-A0B9-403A368CA090}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loretta.Retargeting.Core", "Loretta.Retargeting.Core\Loretta.Retargeting.Core.csproj", "{4684BEC2-35DE-4482-A8BC-3D6B6D942DB7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D86737EA-F924-4592-A9E4-C640FFF7383A}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -16,9 +12,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loretta.Retargeting.Test", "Loretta.Retargeting.Test\Loretta.Retargeting.Test.csproj", "{7D5DDBAA-578F-4762-989B-AAAE1A3D90C1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9AE5ACBA-BFE1-4B11-9A32-C323C8DA4527}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "Benchmark\Benchmark.csproj", "{EBD87C96-E21E-431E-AEAC-D3B44706F3EC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{5B0FA316-9BA9-4DCD-A015-BB7EA026EF24}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\test.yml = .github\workflows\test.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{86A05C0D-9DE9-4F48-8DF1-0E8108D04097}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loretta.Retargeting.Core", "src\Core\Loretta.Retargeting.Core.csproj", "{AA66AB15-7766-422F-B21C-1FAC569F0AD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loretta.Retargeting.Host", "src\Host\Loretta.Retargeting.Host.csproj", "{309F9EC5-458D-4282-B613-7223F7DB47D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "src\Benchmark\Benchmark.csproj", "{992AA9DF-091C-4F56-80DB-575210A2BCA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loretta.Retargeting.Test", "test\Loretta.Retargeting.Test.csproj", "{86355DC0-17C5-47DF-A859-82DA1B47903B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,25 +36,32 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AF6E74E3-413F-4DE0-A0B9-403A368CA090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF6E74E3-413F-4DE0-A0B9-403A368CA090}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF6E74E3-413F-4DE0-A0B9-403A368CA090}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF6E74E3-413F-4DE0-A0B9-403A368CA090}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4684BEC2-35DE-4482-A8BC-3D6B6D942DB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4684BEC2-35DE-4482-A8BC-3D6B6D942DB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4684BEC2-35DE-4482-A8BC-3D6B6D942DB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4684BEC2-35DE-4482-A8BC-3D6B6D942DB7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D5DDBAA-578F-4762-989B-AAAE1A3D90C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D5DDBAA-578F-4762-989B-AAAE1A3D90C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D5DDBAA-578F-4762-989B-AAAE1A3D90C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D5DDBAA-578F-4762-989B-AAAE1A3D90C1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EBD87C96-E21E-431E-AEAC-D3B44706F3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EBD87C96-E21E-431E-AEAC-D3B44706F3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EBD87C96-E21E-431E-AEAC-D3B44706F3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EBD87C96-E21E-431E-AEAC-D3B44706F3EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA66AB15-7766-422F-B21C-1FAC569F0AD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA66AB15-7766-422F-B21C-1FAC569F0AD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA66AB15-7766-422F-B21C-1FAC569F0AD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA66AB15-7766-422F-B21C-1FAC569F0AD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{309F9EC5-458D-4282-B613-7223F7DB47D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{309F9EC5-458D-4282-B613-7223F7DB47D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{309F9EC5-458D-4282-B613-7223F7DB47D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{309F9EC5-458D-4282-B613-7223F7DB47D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{992AA9DF-091C-4F56-80DB-575210A2BCA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{992AA9DF-091C-4F56-80DB-575210A2BCA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{992AA9DF-091C-4F56-80DB-575210A2BCA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{992AA9DF-091C-4F56-80DB-575210A2BCA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86355DC0-17C5-47DF-A859-82DA1B47903B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86355DC0-17C5-47DF-A859-82DA1B47903B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86355DC0-17C5-47DF-A859-82DA1B47903B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86355DC0-17C5-47DF-A859-82DA1B47903B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9AE5ACBA-BFE1-4B11-9A32-C323C8DA4527} = {D86737EA-F924-4592-A9E4-C640FFF7383A}
+		{5B0FA316-9BA9-4DCD-A015-BB7EA026EF24} = {9AE5ACBA-BFE1-4B11-9A32-C323C8DA4527}
+		{AA66AB15-7766-422F-B21C-1FAC569F0AD5} = {86A05C0D-9DE9-4F48-8DF1-0E8108D04097}
+		{309F9EC5-458D-4282-B613-7223F7DB47D3} = {86A05C0D-9DE9-4F48-8DF1-0E8108D04097}
+		{992AA9DF-091C-4F56-80DB-575210A2BCA2} = {86A05C0D-9DE9-4F48-8DF1-0E8108D04097}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D564055-69CC-477C-95FD-C6A11C4332DF}
