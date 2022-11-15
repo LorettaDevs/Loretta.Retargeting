@@ -11,7 +11,6 @@ namespace Loretta.Retargeting.Core
         private readonly LuaSyntaxOptions _targetOptions;
         private readonly Script _script;
         private readonly BitLibraryGlobals _bitLibraryGlobals;
-        private int _localId;
 
         public RetargetingRewriter(LuaSyntaxOptions targetOptions, Script script, BitLibraryGlobals bitLibraryGlobals)
         {
@@ -19,15 +18,6 @@ namespace Loretta.Retargeting.Core
             _script = script ?? throw new System.ArgumentNullException(nameof(script));
             _bitLibraryGlobals = bitLibraryGlobals ?? throw new System.ArgumentNullException(nameof(bitLibraryGlobals));
         }
-
-        private SyntaxToken GetImplDetailIdentifier()
-        {
-            var id = Interlocked.Increment(ref _localId);
-            return SyntaxFactory.Identifier($"__impldetail__{id}");
-        }
-
-        private IdentifierNameSyntax GetImplDetailIdentifierName() =>
-            SyntaxFactory.IdentifierName(GetImplDetailIdentifier());
 
         #region Shared Visitors
 
@@ -77,32 +67,55 @@ namespace Loretta.Retargeting.Core
 
         public override SyntaxList<TNode> VisitList<TNode>(SyntaxList<TNode> list)
         {
-            list = base.VisitList(list);
-
             if (typeof(TNode) == typeof(StatementSyntax))
             {
-                var typedList = new List<StatementSyntax>((SyntaxList<StatementSyntax>) (object) list);
+                var typedList = new List<StatementSyntax>(list.Count);
 
-                for (var idx = typedList.Count - 1; idx >= 0; idx--)
+                for (var idx = 0; idx < list.Count; idx++)
                 {
-                    var statement = typedList[idx];
+                    var originalStatement = (StatementSyntax) (object) list[idx];
+                    if (!_targetOptions.AcceptEmptyStatements
+                        && originalStatement.IsKind(SyntaxKind.EmptyStatement))
+                    {
+                        // Skip over if it's an empty statement.
+                        // Empty statements shouldn't have and pre nor post statements anyways.
+                        continue;
+                    }
+
+                    var statement = (StatementSyntax) Visit(originalStatement);
+
+                    if (_preStatementList.TryGetValue(originalStatement, out var preList))
+                    {
+                        typedList.AddRange(preList);
+                        _preStatementList.Remove(originalStatement);
+                    }
+
                     if (!_targetOptions.AcceptEmptyStatements
                         && statement.IsKind(SyntaxKind.EmptyStatement))
                     {
-                        typedList.RemoveAt(idx);
+                        // Skip
                     }
                     else if (statement.HasAnnotation(RetargetingAnnotations.ToFlatten))
                     {
                         var doStatement = (DoStatementSyntax) statement;
-                        typedList.RemoveAt(idx);
-                        typedList.InsertRange(idx, doStatement.Body.Statements);
+                        typedList.AddRange(doStatement.Body.Statements);
+                    }
+                    else
+                    {
+                        typedList.Add(statement);
+                    }
+
+                    if (_postStatementList.TryGetValue(originalStatement, out var postList))
+                    {
+                        typedList.AddRange(postList);
+                        _postStatementList.Remove(originalStatement);
                     }
                 }
 
-                list = (SyntaxList<TNode>) (object) SyntaxFactory.List(typedList);
+                return (SyntaxList<TNode>) (object) SyntaxFactory.List(typedList);
             }
 
-            return list;
+            return base.VisitList(list);
         }
 
         #endregion Shared Visitors
