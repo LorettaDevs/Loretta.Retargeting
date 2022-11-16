@@ -5,7 +5,7 @@ namespace Loretta.Retargeting.Test.Rewrites;
 public class IfExpressionRewritingTests : RewritingTestsBase
 {
     [Fact]
-    public void RetargetingRewriter_DoesNotRewriteIfExpressionsIfOptionsAllowThem()
+    public void RetargetingRewriter_DoesNotRewriteIfExpressions_WhenTargetOptionsAllowThem()
     {
         var preOptions = LuaSyntaxOptions.AllWithIntegers;
         var postOptions = preOptions;
@@ -15,13 +15,14 @@ public class IfExpressionRewritingTests : RewritingTestsBase
             postOptions,
             """
             print(if a then b else c)
-            """, """
+            """,
+            """
             print(if a then b else c)
             """);
     }
 
     [Fact]
-    public void RetargetingRewriter_RewritesIfExpressionsIfOptionsDoNotAllowThem()
+    public void RetargetingRewriter_RewritesIfExpressions()
     {
         var preOptions = LuaSyntaxOptions.AllWithIntegers;
         var postOptions = preOptions.With(acceptIfExpression: false);
@@ -44,7 +45,7 @@ public class IfExpressionRewritingTests : RewritingTestsBase
     }
 
     [Fact]
-    public void RetargetingRewriter_RewritesIfExpressionsWithElseIfClausesIfOptionsDoNotAllowThem()
+    public void RetargetingRewriter_RewritesIfExpressionsWithElseIfClauses()
     {
         var preOptions = LuaSyntaxOptions.AllWithIntegers;
         var postOptions = preOptions.With(acceptIfExpression: false);

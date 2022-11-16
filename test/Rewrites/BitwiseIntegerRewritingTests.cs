@@ -13,6 +13,34 @@ namespace Loretta.Retargeting.Test.Rewrites
         [InlineData("local x = a ~ b")]
         [InlineData("local x = a >> b")]
         [InlineData("local x = a << b")]
+        public void RetargetingRewriter_DoesNotRewriteBitwiseOperators_WhenTargetVersionSupportsThem(string text)
+        {
+            var preOptions = LuaSyntaxOptions.Lua54;
+            var postOptions = preOptions;
+
+            var node = AssertRewrite(
+                preOptions,
+                postOptions,
+                text,
+                text,
+                LuaVersion.Lua54);
+
+            var compilationUnit = Assert.IsType<CompilationUnitSyntax>(node);
+            var singleStatement = Assert.Single(compilationUnit.Statements.Statements);
+            var localDeclaration = Assert.IsType<LocalVariableDeclarationStatementSyntax>(singleStatement);
+            Assert.NotNull(localDeclaration.EqualsValues);
+            var expression = Assert.Single(localDeclaration.EqualsValues!.Values);
+
+            Assert.False(expression.HasAnnotation(RetargetingAnnotations.TargetVersionHasNoBitLibrary));
+        }
+
+        [Theory]
+        [InlineData("local x = ~a")]
+        [InlineData("local x = a & b")]
+        [InlineData("local x = a | b")]
+        [InlineData("local x = a ~ b")]
+        [InlineData("local x = a >> b")]
+        [InlineData("local x = a << b")]
         public void RetargetingRewriter_GeneratesAnnotationsForBitwiseOperators_WhenTargetVersionDoesNotHaveTheBitLibrary(string text)
         {
             var preOptions = LuaSyntaxOptions.Lua54;
@@ -87,7 +115,7 @@ namespace Loretta.Retargeting.Test.Rewrites
         }
 
         [Fact]
-        public void RetargetingRewriter_RewritesBitwiseNot_ToGlobalCalls()
+        public void RetargetingRewriter_RewritesBitwiseNotToGlobalCalls()
         {
             var preOptions = LuaSyntaxOptions.Lua54;
             var postOptions = preOptions.With(acceptBitwiseOperators: false);
@@ -119,7 +147,7 @@ namespace Loretta.Retargeting.Test.Rewrites
         [InlineData("~", "bxor")]
         [InlineData("<<", "lshift")]
         [InlineData(">>", "rshift")]
-        public void RetargetingRewriter_RewritesBinaryOperators_ToGlobalCalls(string op, string func)
+        public void RetargetingRewriter_RewritesBinaryOperatorsToGlobalCalls(string op, string func)
         {
             var preOptions = LuaSyntaxOptions.Lua54;
             var postOptions = preOptions.With(acceptBitwiseOperators: false);

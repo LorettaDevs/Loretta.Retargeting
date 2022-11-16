@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Loretta.CodeAnalysis.Lua;
+﻿using Loretta.CodeAnalysis.Lua;
 
 namespace Loretta.Retargeting.Test.Rewrites
 {
     public class StringLiteralRewritingTests : RewritingTestsBase
     {
-        private const string RawString = @"aaaa\z   \u{FFFF}\xFF\xFF";
-
         [Fact]
-        public void RetargetingRewriter_LeavesStringsUnchangedIfOptionsAllowForEverything()
+        public void RetargetingRewriter_LeavesStringsUnchanged_WhenTargetOptionsAllowThem()
         {
             var preOptions = LuaSyntaxOptions.AllWithIntegers;
             var postOptions = LuaSyntaxOptions.AllWithIntegers;

@@ -60,6 +60,59 @@ namespace Loretta.Retargeting.Test.Rewrites
             Assert.True(literalToken.HasAnnotation(annotation), "Node does not have the expected annotation.");
         }
 
+        [Theory]
+        [MemberData(nameof(NoRewriteData))]
+        public void RetargetingRewriter_DoesNotRewriteIntegers_WhenTargetOptionsAllowThem(long number, string text)
+        {
+            var preOptions = LuaSyntaxOptions.AllWithIntegers;
+            var postOptions = preOptions;
+
+            var node = AssertRewrite(
+                preOptions,
+                postOptions,
+                $"""
+                local x = {text}
+                """,
+                $"""
+                local x = {text}
+                """);
+
+            var compilationUnit = Assert.IsType<CompilationUnitSyntax>(node);
+            var localDecl = Assert.IsType<LocalVariableDeclarationStatementSyntax>(Assert.Single(compilationUnit.Statements.Statements));
+            Assert.NotNull(localDecl.EqualsValues);
+            var literalExpression = Assert.IsType<LiteralExpressionSyntax>(Assert.Single(localDecl.EqualsValues!.Values));
+            var literalToken = literalExpression.Token;
+
+            if (text.EndsWith("ULL", StringComparison.OrdinalIgnoreCase))
+                Assert.Equal((ulong) number, literalToken.Value);
+            else
+                Assert.Equal(number, literalToken.Value);
+        }
+
+        public static IEnumerable<object[]> NoRewriteData
+        {
+            get
+            {
+                var bases = new[] { 2, 8, 10, 16 };
+                var suffixes = new[] { "", "LL", "ULL" };
+                const long number = int.MaxValue + 1L;
+
+                return from @base in bases
+                       from suffix in suffixes
+                       where @base != 8 || suffix == ""
+                       select new object[] { number, $"{getPrefix(@base)}{Convert.ToString(number, @base)}{suffix}" };
+
+                static string getPrefix(int @base) => @base switch
+                {
+                    2 => "0b",
+                    8 => "0o",
+                    10 => "",
+                    16 => "0x",
+                    _ => throw new InvalidOperationException($"Invalid base '{@base}'.")
+                };
+            }
+        }
+
         [Fact]
         public void RetargetingRewriter_MarksUnconvertableBinaryIntegers() =>
             AssertCore(2, UNABLE_TO_CONVERT, RetargetingAnnotations.CannotConvertToDouble);

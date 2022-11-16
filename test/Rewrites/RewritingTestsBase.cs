@@ -30,7 +30,7 @@ namespace Loretta.Retargeting.Test.Rewrites
             return rewriter.Visit(inputTree.GetRoot()).NormalizeWhitespace(eol: "\n");
         }
 
-        protected static void AssertRewrite(
+        protected static SyntaxNode AssertRewrite(
             LuaSyntaxOptions preOptions,
             LuaSyntaxOptions postOptions,
             string inputString,
@@ -42,6 +42,7 @@ namespace Loretta.Retargeting.Test.Rewrites
             Assert.Equal(
                 NormalizeLineBreaks(outputString.Trim()),
                 NormalizeLineBreaks(output.ToFullString().Trim()));
+            return output;
         }
     }
 }
