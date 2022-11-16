@@ -13,7 +13,7 @@ A library as well as a console tool that re-targets code from one lua version to
     - [x] `\u` Escape (`LuaSyntaxOptions.AcceptUnicodeEscape`)
     - [x] `\x` Escape (`LuaSyntaxOptions.AcceptHexEscapesInStrings`)
 - [ ] `continue` (`LuaSyntaxOptions.ContinueType`)
-- [ ] Luau (Roblox Lua) `if` Expressions (`LuaSyntaxOptions.AcceptIfExpressions`)
+- [x] Luau (Roblox Lua) `if` Expressions (`LuaSyntaxOptions.AcceptIfExpressions`)
 - [x] Integers
     - [x] Binary (`LuaSyntaxOptions.BinaryIntegerFormat`)
     - [x] Octal (`LuaSyntaxOptions.OctalIntegerFormat`)

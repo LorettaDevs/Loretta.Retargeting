@@ -11,5 +11,6 @@ namespace Loretta.Retargeting.Core
         public static readonly SyntaxAnnotation TargetVersionHasNoBitLibrary = new();
         public static readonly SyntaxAnnotation OperandHasMoreThan32Bits = new();
         public static readonly SyntaxAnnotation IdentifierHasLuajitOnlyChars = new();
+        public static readonly SyntaxAnnotation IfExpressionHasNoParentStatement = new();
     }
 }
