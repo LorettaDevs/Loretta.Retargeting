@@ -1,5 +1,4 @@
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
 
@@ -14,16 +13,10 @@ namespace Loretta.Retargeting.Core
             var canUseUnicode = _targetOptions.AcceptUnicodeEscape;
             var canUseWhitespace = _targetOptions.AcceptWhitespaceEscape;
 
-            var requiresRewrite = false;
+            var requiresRewrite = StringRequiresRewrite(token.Text);
+            // Don't touch tokens with diagnostics as they might have broken escapes.
             if (token.ContainsDiagnostics)
-                // Don't touch tokens with diagnostics as they might have broken escapes.
                 requiresRewrite = false;
-            else if (!canUseHex && text.Contains("\\x"))
-                requiresRewrite = true;
-            else if (!canUseUnicode && text.Contains("\\u"))
-                requiresRewrite = true;
-            else if (!canUseWhitespace && text.Contains("\\z"))
-                requiresRewrite = true;
             if (!requiresRewrite)
                 return token;
 
@@ -76,12 +69,6 @@ namespace Loretta.Retargeting.Core
 
             return false;
         }
-
-        // Vendored version of CharUtils.IsWhitespace:
-        // https://github.com/LorettaDevs/Loretta/blob/d6c81002aadcc0f5427ddd36242f65f49fe9e2b2/src/Compilers/Lua/Portable/Utilities/CharUtils.cs#L155
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsWhitespace(char ch) =>
-            ch == ' ' || (uint) (ch - '\t') <= ('\r' - '\t');
 
         // Vendored version of CharUtils.EncodeCharToUtf8:
         // https://github.com/LorettaDevs/Loretta/blob/d6c81002aadcc0f5427ddd36242f65f49fe9e2b2/src/Compilers/Lua/Portable/Utilities/CharUtils.cs#L195
