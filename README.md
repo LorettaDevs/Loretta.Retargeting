@@ -25,7 +25,7 @@ A library as well as a console tool that re-targets code from one lua version to
 - [ ] Invalid Escapes (`LuaSyntaxOptions.AcceptInvalidEscapes`)
 - [x] Shebang Handling (`LuaSyntaxOptions.AcceptShebang`)
 - [x] Compound Assignments (`LuaSyntaxOptions.AcceptCompoundAssignment`)
-- [ ] Hexadecimal Float Literals (`LuaSyntaxOptions.AcceptHexFloatLiterals`)
+- [x] Hexadecimal Float Literals (`LuaSyntaxOptions.AcceptHexFloatLiterals`)
 - [x] Number Bases
     - [x] Binary (`LuaSyntaxOptions.AcceptBinaryNumbers`)
     - [x] Octal (`LuaSyntaxOptions.AcceptOctalNumbers`)
