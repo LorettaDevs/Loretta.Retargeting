@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Loretta.CodeAnalysis;
 using Loretta.CodeAnalysis.Lua;
@@ -47,12 +47,11 @@ namespace Loretta.Retargeting.Core
                     };
                 });
 
-            return SyntaxFactory.Literal(
+            return token.CopyAnnotationsTo(SyntaxFactory.Literal(
                 token.LeadingTrivia,
                 newText,
                 (string) token.Value!,
-                token.TrailingTrivia)
-                .WithAdditionalAnnotations(token.GetAnnotations());
+                token.TrailingTrivia));
         }
 
         private bool StringRequiresRewrite(string text)

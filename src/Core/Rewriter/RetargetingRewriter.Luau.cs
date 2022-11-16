@@ -54,15 +54,15 @@ namespace Loretta.Retargeting.Core
         }
 
         public override SyntaxNode? VisitTypeBinding(TypeBindingSyntax node) =>
-            !_targetOptions.AcceptTypedLua ? null : node;
+            !_targetOptions.AcceptTypedLua ? null : base.VisitTypeBinding(node);
 
         public override SyntaxNode? VisitTypeParameterList(TypeParameterListSyntax node) =>
-            !_targetOptions.AcceptTypedLua ? null : node;
+            !_targetOptions.AcceptTypedLua ? null : base.VisitTypeParameterList(node);
 
         public override SyntaxNode? VisitTypeCastExpression(TypeCastExpressionSyntax node) =>
             !_targetOptions.AcceptTypedLua ? Visit(node.Expression) : base.VisitTypeCastExpression(node);
 
         public override SyntaxNode? VisitTypeDeclarationStatement(TypeDeclarationStatementSyntax node) =>
-            !_targetOptions.AcceptTypedLua ? s_toRemoveStatement : node;
+            !_targetOptions.AcceptTypedLua ? s_toRemoveStatement : base.VisitTypeDeclarationStatement(node);
     }
 }

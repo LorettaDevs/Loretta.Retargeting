@@ -77,7 +77,8 @@ namespace Loretta.Retargeting.Core
                     }
 
                     default:
-                        return node.WithAdditionalAnnotations(RetargetingAnnotations.UnableToRewriteCompoundAssignment);
+                        return base.VisitCompoundAssignmentStatement(node)!
+                                   .WithAdditionalAnnotations(RetargetingAnnotations.UnableToRewriteCompoundAssignment);
                 }
             }
 

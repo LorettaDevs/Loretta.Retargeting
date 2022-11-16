@@ -35,7 +35,7 @@ namespace Loretta.Retargeting.Core
                 && !_targetOptions.UseLuaJitIdentifierRules
                 && token.Text.Any(ch => ch >= 0x7F))
             {
-                return token.WithAdditionalAnnotations(RetargetingAnnotations.IdentifierHasLuajitOnlyChars);
+                return base.VisitToken(token).WithAdditionalAnnotations(RetargetingAnnotations.IdentifierHasLuajitOnlyChars);
             }
 
             return base.VisitToken(token);
@@ -52,7 +52,8 @@ namespace Loretta.Retargeting.Core
                     SyntaxKind.NumericalLiteralExpression,
                     VisitNumber(SyntaxFactory.Literal(
                         ObjectDisplay.FormatLiteral(value, ObjectDisplayOptions.UseHexadecimalNumbers),
-                        value)));
+                        value)))
+                        .WithTriviaFrom(node);
             }
             return base.VisitLiteralExpression(node);
         }

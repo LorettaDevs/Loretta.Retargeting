@@ -9,10 +9,10 @@ namespace Loretta.Retargeting.Core
     {
         private partial SyntaxNode? VisitBitwiseUnaryExpression(UnaryExpressionSyntax expression)
         {
-            var operand = (ExpressionSyntax) Visit(expression.Operand);
-
             if (_targetOptions.AcceptBitwiseOperators)
-                return expression.WithOperand(operand);
+                return base.VisitUnaryExpression(expression);
+
+            var operand = (ExpressionSyntax) Visit(expression.Operand);
 
             if (!_bitLibraryGlobals.HasBitLibrary)
             {
@@ -39,11 +39,11 @@ namespace Loretta.Retargeting.Core
 
         private partial SyntaxNode? VisitBitwiseBinaryExpression(BinaryExpressionSyntax expression)
         {
+            if (_targetOptions.AcceptBitwiseOperators)
+                return base.VisitBinaryExpression(expression);
+
             var left = (ExpressionSyntax) Visit(expression.Left);
             var right = (ExpressionSyntax) Visit(expression.Right);
-
-            if (_targetOptions.AcceptBitwiseOperators)
-                return expression.Update(left, expression.OperatorToken, right);
 
             if (!_bitLibraryGlobals.HasBitLibrary)
             {
