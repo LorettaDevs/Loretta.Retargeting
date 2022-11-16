@@ -6,6 +6,10 @@ namespace Loretta.Retargeting.Core
 {
     internal sealed partial class RetargetingRewriter : LuaSyntaxRewriter
     {
+        private static readonly StatementSyntax s_toRemoveStatement =
+            SyntaxFactory.DoStatement(SyntaxFactory.StatementList())
+                         .WithAdditionalAnnotations(RetargetingAnnotations.StatementToRemove);
+
         private readonly IDictionary<StatementSyntax, IList<StatementSyntax>> _preStatementList = new Dictionary<StatementSyntax, IList<StatementSyntax>>();
         private readonly IDictionary<StatementSyntax, IList<StatementSyntax>> _postStatementList = new Dictionary<StatementSyntax, IList<StatementSyntax>>();
         private int _localId;

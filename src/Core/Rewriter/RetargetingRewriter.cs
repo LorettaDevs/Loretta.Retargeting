@@ -96,6 +96,10 @@ namespace Loretta.Retargeting.Core
                     {
                         // Skip
                     }
+                    else if (statement.HasAnnotation(RetargetingAnnotations.StatementToRemove))
+                    {
+                        // Skip
+                    }
                     else if (statement.HasAnnotation(RetargetingAnnotations.ToFlatten))
                     {
                         var doStatement = (DoStatementSyntax) statement;
