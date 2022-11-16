@@ -4,7 +4,9 @@ A library as well as a console tool that re-targets code from one lua version to
 ## Progress
 
 - [x] FiveM Hash Strings (`LuaSyntaxOptions.AcceptHashStrings`)
-- [x] LuaJIT Identifier Special Characters (`LuaSyntaxOptions.UseLuaJitIdentifierRules`)
+- [ ] LuaJIT Identifier Special Characters (`LuaSyntaxOptions.UseLuaJitIdentifierRules`)
+    - [x] Warn on LuaJIT-only characters in identifiers
+    - [ ] Rewrite identifiers to not use LuaJIT-only characters
 - [ ] Bitwise Operators (`LuaSyntaxOptions.AcceptBitwiseOperators`)
     - [x] Call the function from the bit library if it is available
     - [ ] Implement the bitwise operators using math operators in runtimes that don't have the bit library
