@@ -43,7 +43,8 @@ namespace Loretta.Retargeting.Core
 
         public override SyntaxNode? VisitLiteralExpression(LiteralExpressionSyntax node)
         {
-            if (node.IsKind(SyntaxKind.HashStringLiteralExpression))
+            if (!_targetOptions.AcceptHashStrings
+                && node.IsKind(SyntaxKind.HashStringLiteralExpression))
             {
                 var value = (uint) node.Token.Value!;
 
