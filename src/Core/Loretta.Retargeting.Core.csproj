@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Loretta.CodeAnalysis.Lua" Version="0.2.9" />
+        <PackageReference Include="Loretta.CodeAnalysis.Lua" Version="0.2.11-nightly.10" />
     </ItemGroup>
 
     <ItemGroup>
