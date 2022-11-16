@@ -21,7 +21,7 @@ A library as well as a console tool that re-targets code from one lua version to
     - [x] Hexadecimal (`LuaSyntaxOptions.HexIntegerFormat`)
 - [ ] Local Variable Attributes (`LuaSyntaxOptions.AcceptLocalVariableAttributes`)
 - [ ] Underscore in Number Literals (`LuaSyntaxOptions.AcceptUnderscoreInNumberLiterals`)
-- [ ] Luau Typed Lua (`LuaSyntaxOptions.AcceptTypedLua`)
+- [x] Luau Typed Lua (`LuaSyntaxOptions.AcceptTypedLua`)
 - [ ] Invalid Escapes (`LuaSyntaxOptions.AcceptInvalidEscapes`)
 - [x] Shebang Handling (`LuaSyntaxOptions.AcceptShebang`)
 - [x] Compound Assignments (`LuaSyntaxOptions.AcceptCompoundAssignment`)
