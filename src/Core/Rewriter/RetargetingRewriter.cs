@@ -9,13 +9,11 @@ namespace Loretta.Retargeting.Core
     internal sealed partial class RetargetingRewriter : LuaSyntaxRewriter
     {
         private readonly LuaSyntaxOptions _targetOptions;
-        private readonly Script _script;
         private readonly BitLibraryGlobals _bitLibraryGlobals;
 
-        public RetargetingRewriter(LuaSyntaxOptions targetOptions, Script script, BitLibraryGlobals bitLibraryGlobals)
+        public RetargetingRewriter(LuaSyntaxOptions targetOptions, BitLibraryGlobals bitLibraryGlobals)
         {
             _targetOptions = targetOptions ?? throw new System.ArgumentNullException(nameof(targetOptions));
-            _script = script ?? throw new System.ArgumentNullException(nameof(script));
             _bitLibraryGlobals = bitLibraryGlobals ?? throw new System.ArgumentNullException(nameof(bitLibraryGlobals));
         }
 
