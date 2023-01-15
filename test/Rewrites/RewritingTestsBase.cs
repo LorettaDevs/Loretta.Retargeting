@@ -21,13 +21,12 @@ namespace Loretta.Retargeting.Test.Rewrites
             var inputTree = LuaSyntaxTree.ParseText(
                 NormalizeLineBreaks(inputString),
                 new LuaParseOptions(preOptions));
-            var script = new Script(ImmutableArray.Create(inputTree));
-            var rewriter = new RetargetingRewriter(
-                postOptions,
-                script,
-                new BitLibraryGlobals(version));
 
-            return rewriter.Visit(inputTree.GetRoot()).NormalizeWhitespace(eol: "\n");
+            return RetargetingRewriter.Rewrite(
+                postOptions,
+                new BitLibraryGlobals(version),
+                inputTree.GetRoot())
+                .NormalizeWhitespace(eol: "\n");
         }
 
         protected static SyntaxNode AssertRewrite(

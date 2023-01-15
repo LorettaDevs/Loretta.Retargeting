@@ -11,10 +11,19 @@ namespace Loretta.Retargeting.Core
         private readonly LuaSyntaxOptions _targetOptions;
         private readonly BitLibraryGlobals _bitLibraryGlobals;
 
-        public RetargetingRewriter(LuaSyntaxOptions targetOptions, BitLibraryGlobals bitLibraryGlobals)
+        private RetargetingRewriter(LuaSyntaxOptions targetOptions, BitLibraryGlobals bitLibraryGlobals)
         {
             _targetOptions = targetOptions ?? throw new System.ArgumentNullException(nameof(targetOptions));
             _bitLibraryGlobals = bitLibraryGlobals ?? throw new System.ArgumentNullException(nameof(bitLibraryGlobals));
+        }
+
+        public static SyntaxNode Rewrite(
+            LuaSyntaxOptions targetOptions,
+            BitLibraryGlobals bitLibraryGlobals,
+            SyntaxNode node)
+        {
+            var rewriter = new RetargetingRewriter(targetOptions, bitLibraryGlobals);
+            return rewriter.Visit(node)!;
         }
 
         #region Shared Visitors
