@@ -88,11 +88,11 @@ jobs:
       - linux-build
     steps:
       - name: Download Windows Builds
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: windows-files
           path: artifacts
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4.1.7
         with:
           name: linux-files
           path: artifacts
