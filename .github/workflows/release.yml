@@ -23,9 +23,9 @@ jobs:
     needs: [build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 7.0.x
       - name: Build Windows x64
@@ -39,7 +39,7 @@ jobs:
           Compress-Archive -Path publish\win-x64\* -DestinationPath publish\lua-retarget_win_x64.zip
           Compress-Archive -Path publish\win-x86\* -DestinationPath publish\lua-retarget_win_x86.zip
           Compress-Archive -Path publish\win-arm64\* -DestinationPath publish\lua-retarget_win_arm64.zip
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: windows-files
           path: |
@@ -51,9 +51,9 @@ jobs:
     needs: [build]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 7.0.x
       - name: Install Compilation dependencies
@@ -73,7 +73,7 @@ jobs:
             zip -r "publish/lua-retarget_${rid//-/_}.zip" "publish/$rid/"
             tar czf "publish/lua-retarget_${rid//-/_}.tar.gz" "publish/$rid/"
           done
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: linux-files
           path: |
@@ -88,11 +88,11 @@ jobs:
       - linux-build
     steps:
       - name: Download Windows Builds
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4
         with:
           name: windows-files
           path: artifacts
-      - uses: actions/download-artifact@v4.1.7
+      - uses: actions/download-artifact@v4
         with:
           name: linux-files
           path: artifacts
